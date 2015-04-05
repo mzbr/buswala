@@ -6,8 +6,11 @@ def get_agencies():
     return response.text
     
 def get_routes(agency_tag):
-    return
+    response = requests.get(ROUTE_LIST_URL + agency_tag)
+    return response.text
 
+#need to find directions
 def get_directions(agency_tag,route_tag):
-    return
+    response = requests.get(ROUTE_LIST_URL + agency_tag)
+    return response.text
 
