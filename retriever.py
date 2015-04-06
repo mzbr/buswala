@@ -1,4 +1,6 @@
 from constants import *
+from jsonify import *
+import xml.etree.ElementTree as ET
 import requests
 
 def get_agencies():
@@ -9,8 +11,6 @@ def get_routes(agency_tag):
     response = requests.get(ROUTE_LIST_URL + agency_tag)
     return response.text
 
-#need to find directions
 def get_directions(agency_tag,route_tag):
-    response = requests.get(ROUTE_LIST_URL + agency_tag)
+    routes = requests.get(make_route_config_url(agency_tag, route_tag) )
     return response.text
-
