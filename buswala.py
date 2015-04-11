@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 app = Flask(__name__)
 api = Api(app)
 
+
 class Agency(Resource):
     
     def get(self):
@@ -15,19 +16,22 @@ class Agency(Resource):
         json_resp = convert_to_json(root)
         return json_resp
 
+
 class Route(Resource):
     
     def get(self, agency_tag):
         root = ET.fromstring(r.get_routes(agency_tag))
         json_resp = convert_to_json(root)
         return json_resp
+
         
 class Direction(Resource):
     
     def get(self, agency_tag, route_tag):
         root = ET.fromstring(r.get_directions(agency_tag, route_tag))
-        json_resp = make_list_from_xml(root)
+        json_resp = get_directions_in_json(root)
         return json_resp
+
 
 api.add_resource(Agency,'/agencies/')
 api.add_resource(Route,'/routes/<agency_tag>/')
@@ -35,3 +39,4 @@ api.add_resource(Direction, '/directions/<agency_tag>/<route_tag>/')
 
 if __name__ == '__main__':
     app.run(debug=True,host=os.getenv('IP','0.0.0.0'),port=int(os.getenv('PORT',80)))
+

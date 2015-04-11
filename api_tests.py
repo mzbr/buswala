@@ -6,6 +6,7 @@ class BaseURLTestCase(unittest.TestCase):
 
     def setUp(self):
         url = TEST_URL + "agencies"
+        print("REQUEST URL:" + url)
         response = requests.get(url)
         self.json_resp = json.loads(response.text)
         self.agency_title = "Toronto Transit Commission"
@@ -33,6 +34,7 @@ class AgencyURLTestCase(BaseURLTestCase):
     
     def setUp(self):
         url = TEST_URL + "agencies"
+        print("REQUEST URL:" + url)
         response = requests.get(url)
         self.json_resp = json.loads(response.text)
         self.agency_title = "San Francisco Muni"
@@ -48,6 +50,7 @@ class RouteTestCase(unittest.TestCase):
         self.route_title = "80-Queensway"
         self.route_tag = "80"
         url = TEST_URL + "routes/" + self.agency_tag
+        print("REQUEST URL:" + url)
         response = requests.get(url)
         self.json_resp = json.loads(response.text)
     
@@ -56,6 +59,44 @@ class RouteTestCase(unittest.TestCase):
         
     def testValidAgency(self):
         assert self.json_resp[self.route_tag]['title'] == self.route_title
+
+
+class DirectionTestCase(unittest.TestCase):
     
+    def setUp(self):
+        self.agency_tag = "sf-muni"
+        self.route_tag = "N"
+        self.dir_tag = "N____I_F00"
+        self.dir_title = "Inbound to Caltrain via Downtown"
+        self.dir_name = "Inbound"
+        url = TEST_URL + "directions/" + self.agency_tag + "/" + self.route_tag
+        print("REQUEST URL:" + url)
+        response = requests.get(url)
+        print(response.text)
+        self.json_resp = json.loads(response.text)
+    
+    def testReturnsDict(self):
+        assert isinstance(self.json_resp, dict)
+        
+    def testValidDirectionTitle(self):
+        assert self.json_resp[self.dir_tag]['title'] == self.dir_title
+        
+    def testValidDirectionName(self):
+        assert self.json_resp[self.dir_tag]['name'] == self.dir_name
+
+class DirectionTestCaseTTC(DirectionTestCase):
+    def setUp(self):
+        self.agency_tag = "ttc"
+        self.route_tag = "54"
+        self.dir_tag = "54_0_54A"
+        self.dir_title = "East - 54a Lawrence East towards Starspray"
+        self.dir_name = "East"
+        url = TEST_URL + "directions/" + self.agency_tag + "/" + self.route_tag
+        print("REQUEST URL:" + url)
+        response = requests.get(url)
+        print(response.text)
+        self.json_resp = json.loads(response.text)    
+
+
 if __name__ == "__main__":
     unittest.main()

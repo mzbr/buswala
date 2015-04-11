@@ -12,5 +12,6 @@ def get_routes(agency_tag):
     return response.text
 
 def get_directions(agency_tag,route_tag):
-    routes = requests.get(make_route_config_url(agency_tag, route_tag) )
+    url = make_route_config_url(agency_tag, route_tag)
+    response = requests.get(url)
     return response.text
