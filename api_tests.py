@@ -6,7 +6,6 @@ class BaseURLTestCase(unittest.TestCase):
 
     def setUp(self):
         url = TEST_URL + "agencies"
-        print("REQUEST URL:" + url)
         response = requests.get(url)
         self.json_resp = json.loads(response.text)
         self.agency_title = "Toronto Transit Commission"
@@ -34,7 +33,6 @@ class AgencyURLTestCase(BaseURLTestCase):
     
     def setUp(self):
         url = TEST_URL + "agencies"
-        print("REQUEST URL:" + url)
         response = requests.get(url)
         self.json_resp = json.loads(response.text)
         self.agency_title = "San Francisco Muni"
@@ -70,9 +68,7 @@ class DirectionTestCase(unittest.TestCase):
         self.dir_title = "Inbound to Caltrain via Downtown"
         self.dir_name = "Inbound"
         url = TEST_URL + "directions/" + self.agency_tag + "/" + self.route_tag
-        print("REQUEST URL:" + url)
         response = requests.get(url)
-        print(response.text)
         self.json_resp = json.loads(response.text)
     
     def testReturnsDict(self):
@@ -83,6 +79,7 @@ class DirectionTestCase(unittest.TestCase):
         
     def testValidDirectionName(self):
         assert self.json_resp[self.dir_tag]['name'] == self.dir_name
+        
 
 class DirectionTestCaseTTC(DirectionTestCase):
     def setUp(self):
@@ -92,10 +89,20 @@ class DirectionTestCaseTTC(DirectionTestCase):
         self.dir_title = "East - 54a Lawrence East towards Starspray"
         self.dir_name = "East"
         url = TEST_URL + "directions/" + self.agency_tag + "/" + self.route_tag
-        print("REQUEST URL:" + url)
         response = requests.get(url)
-        print(response.text)
-        self.json_resp = json.loads(response.text)    
+        self.json_resp = json.loads(response.text)   
+        
+    
+class DirectionTestInvalidDirection(unittest.TestCase):
+    def setUp(self):
+        self.agency_tag = "ttc"
+        self.route_tag = "1234"
+        url = TEST_URL + "directions/" + self.agency_tag + "/" + self.route_tag
+        response = requests.get(url)
+        self.json_resp = json.loads(response.text)
+    
+    def testReturnsError(self):
+        assert self.json_resp == "Could not get route \"" + self.route_tag + "\" for agency tag \"" + self.agency_tag + "\". One of the tags could be bad."
 
 
 if __name__ == "__main__":

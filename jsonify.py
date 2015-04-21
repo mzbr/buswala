@@ -1,10 +1,10 @@
 from constants import *
 
 def convert_to_json(root):
-    agencies = {}
+    json_dict = {}
     for child in root.getchildren():
-        agencies[child.get('tag')] = make_dict_of_attribs_except_tag(child)
-    return agencies
+        json_dict[child.get('tag')] = make_dict_of_attribs_except_tag(child)
+    return json_dict
     
 def get_directions_in_json(root):
     directions = root.findall("./route/direction")
@@ -35,3 +35,13 @@ def list_to_json_dict(elem_list):
     
 def make_route_config_url(agency_tag, route_tag):
     return ROUTE_CONFIG_URL + agency_tag + "&r=" + route_tag
+    
+def get_error(root):
+    errors = root.find("Error")
+    if not errors == None:
+        return remove_newlines(errors.text)
+    else:
+        return None
+        
+def remove_newlines(text):
+    return text.strip().replace('\n', '')

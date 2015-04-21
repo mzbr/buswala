@@ -13,7 +13,7 @@ class Agency(Resource):
     
     def get(self):
         root = ET.fromstring(r.get_agencies())
-        json_resp = convert_to_json(root)
+        json_resp = get_error(root) or convert_to_json(root)
         return json_resp
 
 
@@ -21,7 +21,7 @@ class Route(Resource):
     
     def get(self, agency_tag):
         root = ET.fromstring(r.get_routes(agency_tag))
-        json_resp = convert_to_json(root)
+        json_resp = get_error(root) or convert_to_json(root)
         return json_resp
 
         
@@ -29,7 +29,7 @@ class Direction(Resource):
     
     def get(self, agency_tag, route_tag):
         root = ET.fromstring(r.get_directions(agency_tag, route_tag))
-        json_resp = get_directions_in_json(root)
+        json_resp = get_error(root) or get_directions_in_json(root)
         return json_resp
 
 
