@@ -105,5 +105,23 @@ class DirectionTestInvalidDirection(unittest.TestCase):
         assert self.json_resp == "Could not get route \"" + self.route_tag + "\" for agency tag \"" + self.agency_tag + "\". One of the tags could be bad."
 
 
+class StopTestValidTTC(unittest.TestCase):
+    def setUp(self):
+        self.agency_tag = "ttc"
+        self.route_tag = "54"
+        self.dir_tag = "54_0_54A"
+        self.stop_tag = "3758"
+        self.stop_id = "5291"
+        url = TEST_URL + "stops/" + self.agency_tag + "/" + self.route_tag + "/" + self.dir_tag
+        response = requests.get(url)
+        self.json_resp = json.loads(response.text)
+        
+    def testValidStopTitle(self):
+        assert self.json_resp[self.stop_tag]['title'] == "Lawrence Ave East At Meadowvale Rd East Side"
+    
+    def testValidStopId(self):
+        assert self.json_resp[self.stop_tag]['stopId'] == self.stop_id
+        
+
 if __name__ == "__main__":
     unittest.main()
